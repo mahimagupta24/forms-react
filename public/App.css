@@ -97,7 +97,7 @@ button:disabled:active{
 }
 
 .invalid input {
-  border: 1px solid #b40e0e;
+  border: 2px solid #b40e0e;
   background-color: #fddddd;
 }
 
