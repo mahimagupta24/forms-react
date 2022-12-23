@@ -1,73 +1,51 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import useInput from "./use-input";
 
 const SimpleInput = (props) => {
   //  const nameInputRef = useRef()
 
-  // const {value:enteredName,hasError:nameInputHasError,valueChangeHandler:nameChangeHandler,inputBlurHandler:nameBlurHandler}=useInput(value=>value.trim()!='')
-   const [enteredName, setEnteredName] = useState("");
-  const [enteredNameIsTouched, setEnteredNameIsTouched] = useState(false);
-  // const [formIsValid, setFormIsValid] = useState(false);
-  const [enteredEmail,setEnteredEmail] = useState("");
-  const[enteredEmailIsTouched,setEnteredEmailIsTouched] = useState(false)
+  const {
+    value: enteredName,
+    hasError: nameInputHasError,
+    valueChangeHandler: nameChangeHandler,
+    inputBlurHandler: nameBlurHandler,
+    isValid: enteredNameIsValid,
+    reset: resetNameInput,
+  } = useInput((value) => value.trim() !== "");
 
-  const enteredNameIsValid = enteredName.trim() !== "";
-  const enteredNameIsInvalid = !enteredNameIsValid && enteredNameIsTouched;
+  const {
+    value: enteredEmail,
+    hasError: emailInputHasError,
+    valueChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+    isValid: enteredEmailIsValid,
+    reset: resetEmailInput,
+  } = useInput((value) => value.includes("@"));
 
-  const enteredEmailIsValid =enteredEmail.includes('@');
-  const enteredEmailIsInvalid = !enteredEmailIsValid&&enteredEmailIsTouched
-
-  let formIsValid = false
+  let formIsValid = false;
 
   // useEffect(()=>{
-     if(enteredNameIsValid&&enteredEmailIsValid){
-      formIsValid = true;
-    //  setFormIsValid(true)
-  //   }else{
-  //     setFormIsValid(false)
-  //   }
-  // },[setFormIsValid])
-     }
-
-  const inputNameHandler = (event) => {
-    setEnteredName(event.target.value);
-  };
-  const inputEmailHandler = (event) => {
-    setEnteredEmail(event.target.value);
-  };
-  const inputNameBlurHandler = () => {
-    setEnteredNameIsTouched(true);
-  };
-  const inputEmailBlurHandler = () => {
-    setEnteredEmailIsTouched(true);
-  };
-
-
+  if (enteredNameIsValid && enteredEmailIsValid) {
+    formIsValid = true;
+  }
 
   const formSubmissionHandler = (event) => {
     event.preventDefault();
-    setEnteredNameIsTouched(true);
-    if(!enteredNameIsValid){
+    if (!enteredNameIsValid) {
       return;
     }
 
-    //  const enteredValue = nameInputRef.current.value;
-    // console.log(enteredValue);
-      setEnteredName('')
-      setEnteredNameIsTouched(false)
-      setEnteredEmail('')
-      setEnteredEmailIsTouched(false)
+    resetNameInput();
+    resetEmailInput();
   };
-  
-  const inputNameClasses = enteredNameIsInvalid
-  ? "form-control invalid"
-  : "form-control";
 
-  const inputEmailClasses = enteredEmailIsInvalid
-  ? "form-control invalid"
-  : "form-control";
+  const inputNameClasses = nameInputHasError
+    ? "form-control invalid"
+    : "form-control";
 
- 
+  const inputEmailClasses = emailInputHasError
+    ? "form-control invalid"
+    : "form-control";
 
   return (
     <form onSubmit={formSubmissionHandler}>
@@ -78,11 +56,11 @@ const SimpleInput = (props) => {
           //    ref = {nameInputRef}
           type="text"
           id="name"
-          onChange={inputNameHandler}
-          onBlur={inputNameBlurHandler}
+          onChange={nameChangeHandler}
+          onBlur={nameBlurHandler}
           value={enteredName}
         />
-        {enteredNameIsInvalid && (
+        {nameInputHasError && (
           <p className="error-text">Entered name is invalid</p>
         )}
       </div>
@@ -91,11 +69,11 @@ const SimpleInput = (props) => {
         <input
           type="email"
           id="email"
-          onChange={inputEmailHandler}
-          onBlur={inputEmailBlurHandler}
+          onChange={emailChangeHandler}
+          onBlur={emailBlurHandler}
           value={enteredEmail}
         />
-        {enteredEmailIsInvalid && (
+        {emailInputHasError && (
           <p className="error-text">Entered email is invalid</p>
         )}
       </div>

@@ -1,10 +1,10 @@
 
-import SimpleInput from './SimpleInput';
-
+// import SimpleInput from './SimpleInput';
+ import BasicForm from './BasicForm';
 function App() {
   return (
     <div className="app">
-      <SimpleInput />
+      <BasicForm />
     </div>
   );
 }
